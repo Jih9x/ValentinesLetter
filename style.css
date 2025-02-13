@@ -168,7 +168,7 @@ p {
     position: absolute;
     top: 1%;  /* ลดการยกข้อความลงให้มาอยู่ในพื้นที่สีขาว */
     left: 50%;  /* ใช้ 50% จากด้านซ้าย */
-    transform: translate(-50%, 0) scale(0.5); /* แปลค่าเพื่อจัดตำแหน่งตรงกลาง และปรับขนาด */
+    transform: translate(-50%, 0) scale(0.8); /* แปลค่าเพื่อจัดตำแหน่งตรงกลาง และปรับขนาด */
     opacity: 0;  /* ซ่อนเนื้อหา */
     transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s;
     text-align: center;
@@ -178,7 +178,7 @@ p {
 
 .envelope.open .letter-content {
     opacity: 1;  /* ทำให้เนื้อหามองเห็นได้ */
-    transform: translate(-50%, 0) scale(0.6);  /* ขยายขนาดเนื้อหาขึ้นเมื่อเปิด */
+    transform: translate(-50%, 0) scale(0.9);  /* ขยายขนาดเนื้อหาขึ้นเมื่อเปิด */
 }
 
 .letter-content p {
