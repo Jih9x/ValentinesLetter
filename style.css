@@ -1,0 +1,441 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ECE6FE, #C8B6FF);
+    font-family: 'Noto Sans KR', 'Segoe UI', Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 60px;
+    margin: 40px;
+    
+}
+
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background: #fff;
+    cursor: pointer;
+    transition: transform 0.5s;
+    box-shadow: 0 0 20px rgba(184, 192, 255, 0.3);
+    transform-style: preserve-3d;
+    margin: 0 auto;
+    z-index: 1;  /* เพิ่ม z-index สำหรับซอง */
+}
+
+.envelope.open {
+    animation: shake 0.5s ease-in-out;
+}
+
+.front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #C8B6FF;
+    clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
+    transition: transform 0.5s;
+    transform-origin: top;
+    z-index: 15;  /* เพิ่มค่าให้สูงขึ้น */
+}
+
+.envelope.open .front {
+    transform: rotateX(180deg);
+    z-index: 10;  /* ลดค่าลงเมื่อเปิด */
+}
+
+.envelope.close .front {
+    transform: rotateX(0);
+}
+
+.letter {
+    position: absolute;
+    background: linear-gradient(to bottom, #FFFFFF, #F5F3FF);
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    transition: all 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform: translateY(0);
+    z-index: 5;  /* ปรับค่าให้อยู่ระหว่างซองและฝาซอง */
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    border-radius: 15px;
+    pointer-events: none;  /* เพิ่มเพื่อป้องกันการคลิกผ่านจดหมาย */
+}
+
+.envelope.open .letter {
+    opacity: 1;
+    transform: translateY(-220px);  /* เพิ่มระยะยกขึ้น */
+    z-index: 15;  /* ให้อยู่ด้านบนสุดเมื่อเปิด */
+    pointer-events: auto;  /* เปิดการโต้ตอบเมื่อเปิดจดหมาย */
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.3);  /* เพิ่มเอฟเฟคเงาให้ชัดขึ้น */
+}
+
+.envelope.close .letter {
+    transform: translateY(0);
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: none;
+}
+
+h1 {
+    color: #9D8EC7;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #777;
+    line-height: 1.5;
+}
+
+.signature {
+    margin-top: 20px;
+    font-style: italic;
+}
+
+.hearts {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.heart {
+    position: absolute;
+    pointer-events: none;
+    animation: float 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    font-size: 20px;
+    opacity: 0.8;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.hydrangea-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.hydrangea {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="%23C8B6FF"/><circle cx="70" cy="50" r="20" fill="%23E8D3FF"/><circle cx="50" cy="70" r="20" fill="%23B8C0FF"/></svg>');
+    opacity: 0.3;
+    transform-origin: center;
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-2deg); }
+    75% { transform: rotate(2deg); }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateY(-50vh) rotate(360deg) scale(1.2);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(720deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.letter-content {
+    position: absolute;
+    top: 1%;  /* ลดการยกข้อความลงให้มาอยู่ในพื้นที่สีขาว */
+    left: 50%;  /* ใช้ 50% จากด้านซ้าย */
+    transform: translate(-50%, 0) scale(0.5); /* แปลค่าเพื่อจัดตำแหน่งตรงกลาง และปรับขนาด */
+    opacity: 0;  /* ซ่อนเนื้อหา */
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s;
+    text-align: center;
+    width: 90%;
+    padding: 10px;  /* เพิ่ม padding เพื่อให้ข้อความไม่ติดขอบ */
+}
+
+.envelope.open .letter-content {
+    opacity: 1;  /* ทำให้เนื้อหามองเห็นได้ */
+    transform: translate(-50%, 0) scale(0.6);  /* ขยายขนาดเนื้อหาขึ้นเมื่อเปิด */
+}
+
+.letter-content p {
+    margin: 15px 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+.letter-content h1 {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(45deg, #9D8EC7, #B8C0FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 28px;
+}
+
+
+
+.controls {
+    position: relative;
+    margin-top: 250px;  /* เพิ่มระยะห่างให้มากขึ้น */
+    z-index: 20;  /* ให้ปุ่มอยู่ด้านบนสุดเสมอ */
+    padding: 5px;
+    display: flex;
+    gap: 20px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    justify-content: center;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    white-space: normal;
+    width: auto;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    color: #9D8EC7;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    box-shadow: 
+        0 4px 15px rgba(255, 255, 255, 0.2),
+        0 2px 5px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(5px);
+}
+
+.control-btn:hover {
+    background: white;
+    transform: translateY(-2px);
+    color: #7B6FB0;
+    box-shadow: 
+        0 6px 20px rgba(255, 255, 255, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* เพิ่ม CSS สำหรับหิมะ */
+.snowflake {
+    position: fixed;
+    color: white;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    animation: snowfall linear infinite;
+    /* เพิ่ม transition เพื่อให้การเคลื่อนที่นุ่มนวลขึ้น */
+    transition: transform 0.3s ease-in-out;
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(-100vh) translateX(-20%) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) translateX(20%) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* เพิ่มเอฟเฟคริบบิ้น */
+.ribbon {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;  /* ซ่อนริบบิ้นเริ่มต้น */
+    transition: opacity 0.5s ease;  /* เพิ่ม transition */
+}
+
+.envelope.open .ribbon {
+    opacity: 1;  /* แสดงริบบิ้นเมื่อเปิดจดหมาย */
+}
+
+.envelope.close .ribbon {
+    opacity: 0;
+}
+
+.ribbon::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: linear-gradient(135deg, #C8B6FF, #B8C0FF);
+    transform: rotate(45deg) translateY(-20px) scale(0.8);  /* ทำให้ริบบิ้นเล็กลงเล็กน้อย */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    transition: transform 0.5s ease;  /* เพิ่ม transition */
+}
+
+.envelope.open .ribbon::before {
+    transform: rotate(45deg) translateY(-20px) scale(1);  /* ขยายริบบิ้นเมื่อเปิดจดหมาย */
+}
+
+/* เพิ่มเอฟเฟคพื้นหลังแบบใหม่ */
+.bg-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.2;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(207, 189, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(232, 211, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(200, 182, 255, 0.2) 0%, transparent 70%);
+    animation: bgShift 15s ease-in-out infinite;
+}
+
+/* เพิ่ม gradient blur ที่เคลื่อนไหวช้าๆ */
+.gradient-blur {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -2;
+    background: radial-gradient(
+        circle at center,
+        transparent 0%,
+        rgba(184, 192, 255, 0.1) 50%,
+        rgba(232, 211, 255, 0.2) 100%
+    );
+    filter: blur(80px);
+    animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes bgShift {
+    0%, 100% { 
+        transform: translateY(0) scale(1); 
+    }
+    50% { 
+        transform: translateY(-2%) scale(1.05); 
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 0.5; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: scale(1.1);
+    }
+}
+
+/* ปรับแต่ง font สวยๆ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+/* เพิ่ม frame border แบบโรมัน */
+.frame-border {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.frame-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: none;
+    border-radius: 15px;
+}
+
+/* ลวดลายมุมทั้ง 4 */
+.corner {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10,90 Q30,70 50,50 Q70,30 90,10 Q70,30 50,50 Q30,70 10,90' stroke='%23C8B6FF' fill='none' stroke-width='2'/%3E%3Cpath d='M30,90 C40,80 45,75 50,70 S60,60 70,50 M70,90 C60,80 55,75 50,70' stroke='%23E8D3FF' fill='none' stroke-width='1.5'/%3E%3Ccircle cx='50' cy='70' r='2' fill='%23B8C0FF'/%3E%3Ccircle cx='70' cy='50' r='2' fill='%23B8C0FF'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+    z-index: 51;
+}
+
+.corner-tl { top: 0; left: 0; }
+.corner-tr { top: 0; right: 0; transform: rotate(90deg); }
+.corner-bl { bottom: 0; left: 0; transform: rotate(270deg); display: none; }
+.corner-br { bottom: 0; right: 0; transform: rotate(180deg); display: none; }
+
+/* ลวดลายด้านข้าง */
+.border-vine {
+    position: absolute;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40'%3E%3Cpath d='M0,20 Q40,0 100,20 T200,20' stroke='%23C8B6FF' fill='none' stroke-width='1.5'/%3E%3Cpath d='M50,20 Q70,10 100,20 T150,20' stroke='%23E8D3FF' fill='none' stroke-width='1'/%3E%3Ccircle cx='50' cy='20' r='2' fill='%23B8C0FF'/%3E%3Ccircle cx='150' cy='20' r='2' fill='%23B8C0FF'/%3E%3C/svg%3E");
+    opacity: 0.7;
+    z-index: 51;
+}
+
+.border-top, .border-bottom {
+    height: 40px;
+    left: 120px;
+    right: 120px;
+    background-size: 200px 40px;
+    background-repeat: repeat-x;
+}
+
+.border-top { top: 0; transform: rotate(180deg); }
+.border-bottom { bottom: 0; display: block; transform: rotate(0deg); }
+
+.border-left, .border-right {
+    width: 40px;
+    top: 120px;
+    bottom: 120px;
+    background-size: 40px 200px;
+    background-repeat: repeat-y;
+}
+
+.border-left { left: 0; transform: rotate(270deg); }
+.border-right { right: 0; transform: rotate(90deg); }
+
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    .envelope {
+        transform: scale(0.8);
+    }
+    .controls {
+        margin-top: 120px;
+    }
+}
